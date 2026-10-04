@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<h1 class="sr-only">Profile</h1>
+<section class="profile-card">
+  <div class="photo">
+    <span aria-hidden="true">ML</span>
+    <img src="{{ url_for('static', filename='profile.jpg') }}" alt="Photo of Manchor Jr D. Lemindog" onerror="this.remove()">
+  </div>
+
+  <div class="info">
+    <dl class="facts">
+      <dt>Name:</dt><dd>Manchor Jr D. Lemindog</dd>
+      <dt>Course:</dt><dd>BSCpE</dd>
+      <dt>Section:</dt><dd>2-3</dd>
+      <dt>Subject:</dt><dd>Data Structures and Algorithms</dd>
+    </dl>
+    <p class="motto"><strong>Motto:</strong> One step at a time</p>
+  </div>
+</section>
+{% endblock %}

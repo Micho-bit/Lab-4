@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Home Page{% endblock %}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+{% block splash %}{% endblock %}
+<header>
+  <nav aria-label="Main">
+    <ul>
+      <li><a href="{{ url_for('works') }}"{% if request.endpoint in ('index', 'works', 'uppercase', 'lowercase', 'linkedlist', 'circle', 'triangle') %} aria-current="page"{% endif %}>Works</a></li>
+      <li><a href="{{ url_for('profile') }}"{% if request.endpoint == 'profile' %} aria-current="page"{% endif %}>Profile</a></li>
+      <li><a href="{{ url_for('contact') }}"{% if request.endpoint == 'contact' %} aria-current="page"{% endif %}>Contact</a></li>
+    </ul>
+  </nav>
+  <button id="theme" type="button" aria-pressed="false">Dark mode</button>
+</header>
+
+<main>
+{% block content %}{% endblock %}
+</main>
+<footer></footer>
+
+<script>
+  // Theme toggle (remembers the choice when storage is available)
+  var root = document.documentElement, themeBtn = document.getElementById("theme");
+  function setTheme(t){
+    root.setAttribute("data-theme", t);
+    themeBtn.textContent = t === "dark" ? "Light mode" : "Dark mode";
+    themeBtn.setAttribute("aria-pressed", t === "dark");
+    try { localStorage.setItem("theme", t); } catch (e) {}
+  }
+  var saved = null;
+  try { saved = localStorage.getItem("theme"); } catch (e) {}
+  setTheme(saved || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"));
+  themeBtn.addEventListener("click", function(){ setTheme(root.getAttribute("data-theme") === "dark" ? "light" : "dark"); });
+
+</script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

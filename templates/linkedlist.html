@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}Linked List{% endblock %}
+
+{% block content %}
+  <a class="back-link" href="{{ url_for('works') }}">&larr; Back to Works</a>
+  <h1>Linked List</h1>
+  <p class="lead">Insert, remove and search nodes.</p>
+
+  <section class="panel solo">
+    <div id="ll-view" class="ll-view" aria-label="Current linked list"></div>
+
+    <div class="row">
+      <div><label for="ll-value">Value</label><input id="ll-value" type="text" placeholder="40" autocomplete="off"></div>
+      <div><label for="ll-after">Insert after this value</label><input id="ll-after" type="text" placeholder="20" autocomplete="off"></div>
+    </div>
+
+    <div class="ll-group"><strong>Insert</strong>
+      <button class="btn" type="button" data-ll="insert_at_beginning">At beginning</button>
+      <button class="btn" type="button" data-ll="insert_at_end">At end</button>
+      <button class="btn" type="button" data-ll="insert_after">After a value</button>
+    </div>
+    <div class="ll-group"><strong>Remove</strong>
+      <button class="btn alt" type="button" data-ll="remove_beginning">First</button>
+      <button class="btn alt" type="button" data-ll="remove_at_end">Last</button>
+      <button class="btn alt" type="button" data-ll="remove_at">Matching value</button>
+    </div>
+    <div class="ll-group"><strong>Find</strong>
+      <button class="btn alt" type="button" data-ll="search">Search for value</button>
+    </div>
+
+    <div class="result" id="ll-msg" aria-live="polite">The list starts with 10, 20, 30. Try the buttons.</div>
+  </section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='linkedlist.js') }}"></script>
+{% endblock %}

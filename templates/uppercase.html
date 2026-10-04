@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}toUpperCase{% endblock %}
+
+{% block content %}
+  <a class="back-link" href="{{ url_for('works') }}">&larr; Back to Works</a>
+  <h1>toUpperCase</h1>
+  <p class="lead">Type some text and see it in capitals.</p>
+
+  <section class="panel solo">
+    <label for="upper-in">Type some text</label>
+    <input id="upper-in" type="text" placeholder="hello world" autocomplete="off">
+    <div class="result" id="upper-out" aria-live="polite">Your text in capitals appears here.</div>
+  </section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='uppercase.js') }}"></script>
+{% endblock %}

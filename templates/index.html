@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Works{% endblock %}
+
+{% block splash %}
+{% if welcome %}
+<div id="splash" role="button" tabindex="0" aria-label="Welcome to our website. Click anywhere to begin.">
+  <h2>Welcome to our website</h2>
+  <p>Click anywhere to begin</p>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+  <h1>Welcome to my programming works</h1>
+  <p class="lead">Choose a program to try.</p>
+
+  <div class="works-grid">
+    <a class="btn work-btn" href="{{ url_for('uppercase') }}"><span>toUpperCase</span><small>Turn text into capitals</small></a>
+    <a class="btn work-btn" href="{{ url_for('lowercase') }}"><span>toLowerCase</span><small>Turn text into lowercase</small></a>
+    <a class="btn work-btn" href="{{ url_for('linkedlist') }}"><span>Linked List</span><small>Insert, remove and search nodes</small></a>
+    <a class="btn work-btn" href="{{ url_for('circle') }}"><span>Area of Circle</span><small>Find the area from a radius</small></a>
+    <a class="btn work-btn" href="{{ url_for('triangle') }}"><span>Area of Triangle</span><small>Find the area from base and height</small></a>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+{% if welcome %}
+<script src="{{ url_for('static', filename='welcome.js') }}"></script>
+{% endif %}
+{% endblock %}

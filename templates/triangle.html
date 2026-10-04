@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}Area of Triangle{% endblock %}
+
+{% block content %}
+  <a class="back-link" href="{{ url_for('works') }}">&larr; Back to Works</a>
+  <h1>Area of Triangle</h1>
+  <p class="lead">Enter a base and a height to find the area.</p>
+
+  <section class="panel solo">
+    <div class="row">
+      <div><label for="base">Base</label><input id="base" type="number" min="0" step="any" placeholder="10"></div>
+      <div><label for="height">Height</label><input id="height" type="number" min="0" step="any" placeholder="6"></div>
+    </div>
+    <div class="result" id="tri-out" aria-live="polite">Enter a base and a height to see the area.</div>
+  </section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='triangle.js') }}"></script>
+{% endblock %}

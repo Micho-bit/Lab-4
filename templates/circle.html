@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Area of Circle{% endblock %}
+
+{% block content %}
+  <a class="back-link" href="{{ url_for('works') }}">&larr; Back to Works</a>
+  <h1>Area of Circle</h1>
+  <p class="lead">Enter a radius to find the area.</p>
+
+  <section class="panel solo">
+    <label for="radius">Radius</label>
+    <input id="radius" type="number" min="0" step="any" placeholder="5">
+    <div class="result" id="circle-out" aria-live="polite">Enter a radius to see the area.</div>
+  </section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='circle.js') }}"></script>
+{% endblock %}
