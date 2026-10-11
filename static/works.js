@@ -23,12 +23,6 @@
     upOut.textContent = upIn.value ? upIn.value.toUpperCase() : "Your text in capitals appears here.";
   });
 
-  // toLowerCase
-  var lowIn = document.getElementById("lower-in"), lowOut = document.getElementById("lower-out");
-  lowIn.addEventListener("input", function(){
-    lowOut.textContent = lowIn.value ? lowIn.value.toLowerCase() : "Your text in lowercase appears here.";
-  });
-
   // Circle area
   var r = document.getElementById("radius"), cOut = document.getElementById("circle-out");
   r.addEventListener("input", function(){

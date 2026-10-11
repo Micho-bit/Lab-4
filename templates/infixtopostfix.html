@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Infix to Postfix{% endblock %}
+
+{% block content %}
+  <a class="back-link" href="{{ url_for('works') }}">&larr; Back to Works</a>
+  <h1>Infix to Postfix</h1>
+  <p class="lead">Type an infix expression, press Convert, then step through how it is solved.</p>
+
+  <section class="panel solo">
+    <label for="infix-in">Infix</label>
+    <input id="infix-in" type="text" placeholder="a*(b+c)/d" autocomplete="off">
+    <div class="ll-group">
+      <button id="infix-btn" class="btn" type="button">Convert</button>
+    </div>
+    <div class="result" id="infix-out" aria-live="polite">Your postfix expression appears here.</div>
+
+    <div id="ix-vis" hidden>
+      <span class="ix-label">Input (current character is highlighted)</span>
+      <div id="ix-input" class="ll-view" aria-label="Infix input"></div>
+
+      <span class="ix-label">Stack (operators waiting)</span>
+      <div id="ix-stack" class="ll-view" aria-label="Operator stack"></div>
+
+      <span class="ix-label">Output (postfix so far)</span>
+      <div id="ix-output" class="ll-view" aria-label="Postfix output"></div>
+
+      <div class="result" id="ix-msg" aria-live="polite"></div>
+
+      <div class="ll-group">
+        <button id="ix-first" class="btn alt" type="button">Restart</button>
+        <button id="ix-prev" class="btn alt" type="button">Previous</button>
+        <button id="ix-next" class="btn" type="button">Next step</button>
+        <button id="ix-last" class="btn alt" type="button">Skip to end</button>
+      </div>
+    </div>
+  </section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='infixtopostfix.js') }}"></script>
+{% endblock %}

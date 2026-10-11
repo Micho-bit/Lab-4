@@ -106,3 +106,9 @@
   .back-link{display:inline-block;margin-top:8px;color:var(--accent);font-weight:700;text-decoration:none}
   .back-link:hover{text-decoration:underline}
   .panel.solo{border-top:1px solid var(--line);border-radius:10px}
+  /* Infix to postfix visualization */
+  .ix-label{display:block;margin:18px 0 6px;font-weight:700}
+  #ix-vis [hidden]{display:none}
+  #ix-vis .ll-view{min-height:96px}
+  .btn:disabled{opacity:.45;cursor:not-allowed}
+  .btn:disabled:hover{background:transparent;border-color:var(--accent);color:var(--accent)}
