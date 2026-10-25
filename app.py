@@ -1,4 +1,7 @@
 from flask import Flask, render_template, jsonify, request
+from stack import Stack
+from linked_list import LinkedList
+from my_queue import Queue
 
 app = Flask(__name__)
 
@@ -52,15 +55,26 @@ def isRightAssociative(c):
     return c == '^'
 
 
+def stack_to_list(stack):
+    """Read the linked stack from bottom to top (used only to draw the steps)."""
+    items = []
+    current = stack.top
+    while current:
+        items.append(current.data)
+        current = current.next
+    items.reverse()
+    return items
+
+
 def infixToPostfixSteps(s):
-    """Same algorithm as before, but it also records every step for the visualization."""
-    st = []
+    """Same algorithm as before, using my own Stack class, and it records every step."""
+    st = Stack()
     res = []
     steps = []
 
     def snap(pos, action):
         steps.append({"pos": pos, "action": action,
-                      "stack": st[:], "output": res[:]})
+                      "stack": stack_to_list(st), "output": res[:]})
 
     snap(-1, "Start. The stack and the output are both empty.")
 
@@ -77,16 +91,16 @@ def infixToPostfixSteps(s):
 
         # If '(', push to stack
         elif c == '(':
-            st.append('(')
+            st.push('(')
             snap(pos, "'(' : push it onto the stack.")
 
         # If ')', pop until '('
         elif c == ')':
             popped = []
-            while st and st[-1] != '(':
-                popped.append(st[-1])
+            while st.peek() is not None and st.peek() != '(':
+                popped.append(st.peek())
                 res.append(st.pop())
-            if not st:
+            if st.peek() is None:
                 raise ValueError("Unbalanced parentheses: extra ')'.")
             st.pop()
             if popped:
@@ -99,12 +113,12 @@ def infixToPostfixSteps(s):
         # If operator
         elif c in '+-*/^':
             popped = []
-            while st and st[-1] != '(' and \
-                    (prec(st[-1]) > prec(c) or
-                     (prec(st[-1]) == prec(c) and not isRightAssociative(c))):
-                popped.append(st[-1])
+            while st.peek() is not None and st.peek() != '(' and \
+                    (prec(st.peek()) > prec(c) or
+                     (prec(st.peek()) == prec(c) and not isRightAssociative(c))):
+                popped.append(st.peek())
                 res.append(st.pop())
-            st.append(c)
+            st.push(c)
             if popped:
                 text = ("Operator '" + c + "': pop " +
                         ", ".join("'" + x + "'" for x in popped) +
@@ -117,7 +131,7 @@ def infixToPostfixSteps(s):
             raise ValueError("Invalid character: " + c)
 
     # Pop remaining operators
-    while st:
+    while st.peek() is not None:
         top = st.pop()
         if top == '(':
             raise ValueError("Unbalanced parentheses: missing ')'.")
@@ -146,6 +160,134 @@ def convert_infix():
         return jsonify(postfix=postfix, steps=steps)
     except ValueError as e:
         return jsonify(error=str(e)), 400
+
+
+# ---------- Linked List (uses my LinkedList class from Lab_3_linklist.py) ----------
+my_list = LinkedList()
+for _v in ["10", "20", "30"]:
+    my_list.insert_at_end(_v)
+
+
+def ll_to_list():
+    items = []
+    current = my_list.head
+    while current:
+        items.append(current.data)
+        current = current.next
+    return items
+
+
+@app.route('/works/linkedlist/state')
+def linkedlist_state():
+    return jsonify(list=ll_to_list())
+
+
+@app.route('/works/linkedlist/action', methods=['POST'])
+def linkedlist_action():
+    data = request.get_json(silent=True) or {}
+    action = data.get('action', '')
+    value = str(data.get('value', '')).strip()
+    after = str(data.get('after', '')).strip()
+    msg = ""
+    mark = None
+
+    if action == "insert_at_beginning":
+        my_list.insert_at_beginning(value)
+        msg = "Inserted " + value + " at the beginning."
+        mark = 0
+
+    elif action == "insert_at_end":
+        my_list.insert_at_end(value)
+        msg = "Inserted " + value + " at the end."
+        mark = len(ll_to_list()) - 1
+
+    elif action == "insert_after":
+        if my_list.search(after):
+            my_list.insert_after(after, value)
+            msg = "Inserted " + value + " after " + after + "."
+            mark = ll_to_list().index(after) + 1
+        else:
+            msg = "No node holds " + after + ". The list is unchanged."
+
+    elif action == "remove_beginning":
+        removed = my_list.remove_beginning()
+        msg = "The list is empty." if removed is None else "Removed " + removed + " from the beginning."
+
+    elif action == "remove_at_end":
+        removed = my_list.remove_at_end()
+        msg = "The list is empty." if removed is None else "Removed " + removed + " from the end."
+
+    elif action == "remove_at":
+        removed = my_list.remove_at(value)
+        msg = value + " is not in the list. The list is unchanged." if removed is None else "Removed " + removed + "."
+
+    elif action == "search":
+        if my_list.search(value):
+            msg = "Found " + value + " in the list."
+            mark = ll_to_list().index(value)
+        else:
+            msg = value + " is not in the list."
+
+    else:
+        return jsonify(error="Unknown action."), 400
+
+    return jsonify(list=ll_to_list(), message=msg, mark=mark)
+
+
+# ---------- Queue (uses my own Queue class in my_queue.py) ----------
+my_queue = Queue()
+for _v in ["10", "20", "30"]:
+    my_queue.enqueue(_v)
+
+
+def queue_to_list():
+    items = []
+    current = my_queue.front
+    while current:
+        items.append(current.data)
+        current = current.next
+    return items
+
+
+@app.route('/works/queue')
+def queue_page():
+    return render_template('queue.html')
+
+
+@app.route('/works/queue/state')
+def queue_state():
+    return jsonify(list=queue_to_list())
+
+
+@app.route('/works/queue/action', methods=['POST'])
+def queue_action():
+    data = request.get_json(silent=True) or {}
+    action = data.get('action', '')
+    value = str(data.get('value', '')).strip()
+    msg = ""
+    mark = None
+
+    if action == "enqueue":
+        my_queue.enqueue(value)
+        msg = "Enqueued " + value + " at the rear."
+        mark = len(queue_to_list()) - 1
+
+    elif action == "dequeue":
+        removed = my_queue.dequeue()
+        msg = "The queue is empty." if removed is None else "Dequeued " + removed + " from the front."
+
+    elif action == "peek":
+        front = my_queue.peek()
+        if front is None:
+            msg = "The queue is empty."
+        else:
+            msg = "The front of the queue is " + front + "."
+            mark = 0
+
+    else:
+        return jsonify(error="Unknown action."), 400
+
+    return jsonify(list=queue_to_list(), message=msg, mark=mark)
 
 
 @app.route('/profile')

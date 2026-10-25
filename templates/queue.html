@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Queue{% endblock %}
+
+{% block content %}
+  <a class="back-link" href="{{ url_for('works') }}">&larr; Back to Works</a>
+  <h1>Queue</h1>
+  <p class="lead">First in, first out. Enqueue at the rear, dequeue from the front.</p>
+
+  <section class="panel solo">
+    <div id="q-view" class="ll-view" aria-label="Current queue"></div>
+
+    <div class="row">
+      <div><label for="q-value">Value</label><input id="q-value" type="text" placeholder="40" autocomplete="off"></div>
+    </div>
+
+    <div class="ll-group">
+      <button class="btn" type="button" data-q="enqueue">Enqueue</button>
+      <button class="btn alt" type="button" data-q="dequeue">Dequeue</button>
+      <button class="btn alt" type="button" data-q="peek">Peek front</button>
+    </div>
+
+    <div class="result" id="q-msg" aria-live="polite">The queue starts with 10, 20, 30. Try the buttons.</div>
+  </section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='queue.js') }}"></script>
+{% endblock %}
